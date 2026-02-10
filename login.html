@@ -24,38 +24,28 @@
             <div class="guardian-blue w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <i class="fas fa-key text-2xl text-white"></i>
             </div>
-            <h2 class="text-3xl font-black tracking-tighter">NEURAL <span class="text-blue-500">LOGIN</span></h2>
-            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mt-2">Identify Guardian Credentials</p>
+            <h2 class="text-3xl font-black tracking-tighter uppercase">Neural <span class="text-blue-500">Login</span></h2>
+            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mt-2">Guardian Credential Verification</p>
         </div>
         
         <form id="loginForm" class="space-y-5">
             <div class="text-left space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Neural ID (Email/Phone)</label>
-                <input type="text" id="loginId" required placeholder="guardian@pharma.ai" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Neural ID (Email)</label>
+                <input type="email" id="loginId" required placeholder="guardian@pharma.ai" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
             </div>
             <div class="text-left space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Security Code (Password)</label>
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Security Code</label>
                 <input type="password" id="loginPass" required placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
             </div>
             
             <button type="submit" class="w-full guardian-blue py-5 rounded-2xl font-bold text-lg shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition mt-4">
-                Authorize Access
-            </button>
-
-            <div class="flex items-center my-6">
-                <div class="flex-grow border-t border-white/10"></div>
-                <span class="px-4 text-[10px] text-slate-500 font-bold italic uppercase tracking-widest">or use</span>
-                <div class="flex-grow border-t border-white/10"></div>
-            </div>
-
-            <button type="button" class="w-full border border-white/10 hover:bg-white/5 py-4 rounded-2xl font-bold transition text-xs uppercase tracking-widest">
-                Request OTP Signal
+                Authorize & Enter Vault
             </button>
         </form>
         
         <div class="mt-8 flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-            <button onclick="window.location.href='registration.html'" class="text-blue-400 hover:text-blue-300 transition">Create Profile</button>
-            <button onclick="window.location.href='index.html'" class="text-slate-500 hover:text-white transition">Back Home</button>
+            <button onclick="window.location.href='registration.html'" class="text-blue-400 hover:text-blue-300 transition">Establish Profile</button>
+            <button onclick="window.location.href='index.html'" class="text-slate-500 hover:text-white transition">Command Center</button>
         </div>
     </div>
 
@@ -63,7 +53,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-        // CONFIG - Integrated with your project
         const firebaseConfig = {
             apiKey: "AIzaSyAK33HQYLg3BqW25Arp7ERjuVn637mSOOo",
             authDomain: "pharma-guardian-ai.firebaseapp.com",
@@ -84,8 +73,11 @@
             try {
                 // Authorize via Firebase Auth
                 await signInWithEmailAndPassword(auth, id, pass);
-                alert("Neural link established. Welcome back, Guardian.");
-                window.location.href = 'index.html'; 
+                alert("Neural link established. Accessing Guardian Vault...");
+                
+                // --- REDIRECTION LINK TO PROFILE ---
+                window.location.href = 'profile.html'; 
+                
             } catch (err) {
                 alert("Authorization Denied: " + err.message);
             }
@@ -93,30 +85,60 @@
     </script>
 
     <script>
-        // Space Canvas Animation logic remains identical for consistency
+        // Space Canvas with Meteor Falling Effect
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
+        let meteors = [];
+
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            stars = Array.from({length: 150}, () => ({
+            stars = Array.from({length: 100}, () => ({
                 x: Math.random() * canvas.width, y: Math.random() * canvas.height, z: Math.random() * canvas.width
             }));
+            meteors = Array.from({length: 5}, () => createMeteor());
         }
+
+        function createMeteor() {
+            return {
+                x: Math.random() * canvas.width,
+                y: -100,
+                length: Math.random() * 80 + 20,
+                speed: Math.random() * 10 + 5,
+                opacity: Math.random()
+            };
+        }
+
         function draw() {
             ctx.fillStyle = "#020617"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw Stars
             ctx.fillStyle = "white";
             stars.forEach(s => {
                 let x = (s.x - canvas.width / 2) * (canvas.width / s.z) + canvas.width / 2;
                 let y = (s.y - canvas.height / 2) * (canvas.width / s.z) + canvas.height / 2;
                 let size = (1 - s.z / canvas.width) * 1.5;
                 ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI * 2); ctx.fill();
-                s.z -= 1; if(s.z <= 0) s.z = canvas.width;
+                s.z -= 0.5; if(s.z <= 0) s.z = canvas.width;
             });
+
+            // Draw Falling Meteors (Metroid Style)
+            meteors.forEach((m, i) => {
+                ctx.strokeStyle = `rgba(59, 130, 246, ${m.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(m.x, m.y);
+                ctx.lineTo(m.x + m.length/2, m.y + m.length);
+                ctx.stroke();
+                m.y += m.speed;
+                m.x += m.speed / 2;
+                if(m.y > canvas.height) meteors[i] = createMeteor();
+            });
+
             requestAnimationFrame(draw);
         }
         init(); draw();
+        window.addEventListener('resize', init);
     </script>
 </body>
 </html>
-
