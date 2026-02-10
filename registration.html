@@ -28,28 +28,32 @@
             <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mt-2">Neural Identity Establishment</p>
         </div>
         
-        <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form id="regForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Full Name</label>
-                <input type="text" required placeholder="Enter Name" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+                <input type="text" id="fullName" required placeholder="Enter Name" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
             </div>
             <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Email Address</label>
-                <input type="email" required placeholder="id@pharmaguardian.ai" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+                <input type="email" id="email" required placeholder="id@pharmaguardian.ai" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
             </div>
             <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Phone Network</label>
-                <input type="tel" required placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+                <input type="tel" id="phone" required placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
             </div>
             <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Birth Cycle (DOB)</label>
-                <input type="date" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-slate-400 focus:border-blue-500 outline-none transition">
+                <input type="date" id="dob" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-slate-400 focus:border-blue-500 outline-none transition">
+            </div>
+            <div class="md:col-span-2 space-y-1">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Password (Required for Auth)</label>
+                <input type="password" id="password" required placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
             </div>
             <div class="md:col-span-2 space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Strategic Address (Location)</label>
-                <textarea required placeholder="Nanded Regional Coordinates..." class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none h-24 transition"></textarea>
+                <textarea id="address" required placeholder="Nanded Regional Coordinates..." class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none h-24 transition"></textarea>
             </div>
-            <button type="button" onclick="window.location.href='index.html'" class="md:col-span-2 guardian-blue py-6 rounded-3xl font-bold text-lg shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition">
+            <button type="submit" class="md:col-span-2 guardian-blue py-6 rounded-3xl font-bold text-lg shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition">
                 Authorize Profile
             </button>
         </form>
@@ -61,7 +65,64 @@
         </div>
     </div>
 
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK33HQYLg3BqW25Arp7ERjuVn637mSOOo",
+            authDomain: "pharma-guardian-ai.firebaseapp.com",
+            projectId: "pharma-guardian-ai",
+            storageBucket: "pharma-guardian-ai.firebasestorage.app",
+            messagingSenderId: "569057807951",
+            appId: "1:569057807951:web:2d0372e0f022f3428d643a",
+            measurementId: "G-KJBCZRLPKJ"
+        };
+
+        // Initialize
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Form Submit Logic
+        const regForm = document.getElementById('regForm');
+        regForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const dob = document.getElementById('dob').value;
+            const address = document.getElementById('address').value;
+
+            try {
+                // 1. Create User in Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Save Data to Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    name: fullName,
+                    email: email,
+                    phone: phone,
+                    dob: dob,
+                    address: address, // Nanded Coordinates
+                    created_at: new Date()
+                });
+
+                alert("Neural Identity Established! Welcome, Guardian.");
+                window.location.href = 'index.html'; // Go to home/dashboard
+            } catch (error) {
+                alert("Auth Error: " + error.message);
+            }
+        });
+    </script>
+
     <script>
+        // Space Animation (Original Canvas Logic)
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -87,4 +148,3 @@
     </script>
 </body>
 </html>
-
