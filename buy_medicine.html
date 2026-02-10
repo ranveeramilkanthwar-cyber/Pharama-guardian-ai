@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Medicines | Pharma Guardian AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f3f6; color: #212121; }
+        .space-header { background: #020617; color: white; }
+        .flip-card { background: white; transition: box-shadow 0.3s ease; border: 1px solid #e0e0e0; }
+        .flip-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .price-green { color: #388e3c; font-weight: 800; }
+        .btn-cart { background: #ff9f00; color: white; }
+        .btn-buy { background: #fb641b; color: white; }
+        .sidebar { background: white; height: fit-content; position: sticky; top: 80px; }
+        
+        /* Star background for header */
+        #header-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.4; }
+    </style>
+</head>
+<body>
+
+    <nav class="space-header sticky top-0 z-[100] px-4 py-3 shadow-lg overflow-hidden relative">
+        <canvas id="header-canvas"></canvas>
+        <div class="max-w-7xl mx-auto flex items-center justify-between relative z-10">
+            <div class="flex items-center space-x-8">
+                <div class="flex flex-col cursor-pointer" onclick="window.location.href='index.html'">
+                    <span class="text-xl font-extrabold italic leading-none">Pharma<span class="text-blue-400">Guardian</span></span>
+                    <span class="text-[10px] text-slate-400 italic">Explore <span class="text-yellow-400 font-bold">Plus</span></span>
+                </div>
+                <div class="hidden md:flex items-center bg-white rounded-sm w-[400px] px-4 py-2">
+                    <input type="text" placeholder="Search for medicines, brands and more" class="w-full text-sm text-slate-700 outline-none">
+                    <i class="fas fa-search text-blue-600"></i>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-8 font-bold text-sm">
+                <button class="bg-white text-blue-600 px-8 py-1 rounded-sm shadow-md">Login</button>
+                <div class="flex items-center space-x-2 cursor-pointer">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+        
+        <aside class="hidden md:block sidebar p-4 rounded-sm shadow-sm">
+            <h2 class="font-bold text-lg mb-4 border-b pb-2">Filters</h2>
+            <div class="mb-6">
+                <p class="text-xs font-bold uppercase text-slate-500 mb-2">Categories</p>
+                <ul class="text-sm space-y-2">
+                    <li class="text-blue-600 font-bold">Cardiovascular</li>
+                    <li class="hover:text-blue-600 cursor-pointer">Anti-Diabetic</li>
+                    <li class="hover:text-blue-600 cursor-pointer">Antibiotics</li>
+                    <li class="hover:text-blue-600 cursor-pointer">Pain Relief</li>
+                </ul>
+            </div>
+            <div>
+                <p class="text-xs font-bold uppercase text-slate-500 mb-2">Price Range</p>
+                <input type="range" class="w-full">
+            </div>
+        </aside>
+
+        <main class="md:col-span-3">
+            <div class="bg-white p-4 mb-4 rounded-sm shadow-sm flex justify-between items-center">
+                <span class="text-sm font-bold">Showing Nanded Strategic Inventory (2025-26)</span>
+                <select class="text-sm border p-1 outline-none">
+                    <option>Sort by: Popularity</option>
+                    <option>Price: Low to High</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="med-list">
+                </div>
+        </main>
+    </div>
+
+    <div id="payModal" class="fixed inset-0 bg-black/80 z-[200] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-lg overflow-hidden">
+            <div class="bg-blue-600 p-4 text-white font-bold flex justify-between">
+                <span>Neural Payment Vault</span>
+                <button onclick="closePay()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 text-center">
+                <p class="text-slate-500 text-sm mb-2">Amount to Pay</p>
+                <h3 class="text-3xl font-black text-slate-800 mb-6" id="total-price">₹0.00</h3>
+                <div class="space-y-4">
+                    <button class="w-full border p-3 rounded-md flex justify-between items-center hover:bg-slate-50">
+                        <span>PhonePe / Google Pay</span>
+                        <i class="fas fa-chevron-right text-slate-400"></i>
+                    </button>
+                    <button class="w-full border p-3 rounded-md flex justify-between items-center hover:bg-slate-50">
+                        <span>Credit / Debit Card</span>
+                        <i class="fas fa-chevron-right text-slate-400"></i>
+                    </button>
+                    <button class="w-full border p-3 rounded-md flex justify-between items-center hover:bg-slate-50">
+                        <span>Net Banking</span>
+                        <i class="fas fa-chevron-right text-slate-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA FROM NANDED STRATEGIC SURVEY
+        const inventory = [
+            { name: "Telma 40", mg: "40mg", price: 212.94, brand: "Glenmark", info: "Angiotensin II Receptor Blocker for Hypertension.", pkg: "30 Tablets" },
+            { name: "Atorva 10", mg: "10mg", price: 79.63, brand: "Zydus", info: "HMG-CoA reductase inhibitor for Cholesterol.", pkg: "15 Tablets" },
+            { name: "Glycomet GP 1", mg: "1mg/500mg", price: 123.28, brand: "USV", info: "Metformin + Glimepiride for Type 2 Diabetes.", pkg: "15 Tablets" },
+            { name: "Augmentin 625 Duo", mg: "625mg", price: 223.50, brand: "GSK", info: "Amoxicillin + Clavulanic Acid Antibiotic.", pkg: "10 Tablets" },
+            { name: "Thyronorm 50", mg: "50mcg", price: 109.12, brand: "Abbott", info: "Thyroxine replacement for Hypothyroidism.", pkg: "100 Tablets" },
+            { name: "Dolo 650", mg: "650mg", price: 30.11, brand: "Micro Labs", info: "Analgesic for fever and pain management.", pkg: "15 Tablets" }
+        ];
+
+        const medList = document.getElementById('med-list');
+        
+        inventory.forEach(med => {
+            medList.innerHTML += `
+                <div class="flip-card p-4 flex flex-col h-full">
+                    <div class="h-40 bg-slate-100 mb-4 flex items-center justify-center rounded-sm relative group overflow-hidden">
+                        <i class="fas fa-pills text-5xl text-slate-300"></i>
+                        <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <h3 class="font-bold text-sm hover:text-blue-600 cursor-pointer mb-1">${med.name} (${med.mg})</h3>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase mb-2">${med.brand} | ${med.pkg}</p>
+                    <div class="flex items-center space-x-2 mb-2">
+                        <span class="bg-green-600 text-white text-[10px] px-1.5 py-0.5 rounded-sm font-bold">4.4 <i class="fas fa-star text-[8px]"></i></span>
+                        <span class="text-slate-400 text-[10px] font-bold">(2,451)</span>
+                    </div>
+                    <div class="mb-4">
+                        <span class="text-lg font-bold">₹${med.price}</span>
+                        <span class="text-xs text-slate-400 line-through ml-2">₹${(med.price * 1.2).toFixed(2)}</span>
+                        <span class="text-xs text-green-600 font-bold ml-2">20% off</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mb-4 flex-grow">${med.info}</p>
+                    <div class="grid grid-cols-2 gap-2 mt-auto">
+                        <button onclick="alert('Added to cart')" class="btn-cart py-2 text-xs font-bold uppercase rounded-sm">Add to Cart</button>
+                        <button onclick="openPay(${med.price})" class="btn-buy py-2 text-xs font-bold uppercase rounded-sm">Buy Now</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        function openPay(price) {
+            document.getElementById('total-price').innerText = `₹${price}`;
+            document.getElementById('payModal').classList.remove('hidden');
+            document.getElementById('payModal').classList.add('flex');
+        }
+
+        function closePay() {
+            document.getElementById('payModal').classList.add('hidden');
+            document.getElementById('payModal').classList.remove('flex');
+        }
+
+        // Header Star Canvas
+        const canvas = document.getElementById('header-canvas');
+        const ctx = canvas.getContext('2d');
+        function initStars() {
+            canvas.width = window.innerWidth;
+            canvas.height = 80;
+            ctx.fillStyle = "white";
+            for(let i=0; i<100; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*1, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+        initStars();
+        window.onresize = initStars;
+    </script>
+</body>
+</html>
+
