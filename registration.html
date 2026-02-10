@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Vault | Pharma Guardian AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        #space-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .guardian-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-vault { animation: slideIn 0.6s ease-out forwards; }
+    </style>
+</head>
+<body>
+    <canvas id="space-canvas"></canvas>
+
+    <div class="glass w-full max-w-2xl p-10 rounded-[3.5rem] shadow-2xl m-4 relative animate-vault border-blue-500/20">
+        <div class="text-center mb-8">
+            <div class="guardian-blue w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i class="fas fa-user-astronaut text-2xl text-white"></i>
+            </div>
+            <h2 class="text-3xl font-black tracking-tighter">PHARMA <span class="text-blue-500">VAULT</span></h2>
+            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mt-2">Neural Identity Establishment</p>
+        </div>
+        
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Full Name</label>
+                <input type="text" required placeholder="Enter Name" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Email Address</label>
+                <input type="email" required placeholder="id@pharmaguardian.ai" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Phone Network</label>
+                <input type="tel" required placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Birth Cycle (DOB)</label>
+                <input type="date" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-slate-400 focus:border-blue-500 outline-none transition">
+            </div>
+            <div class="md:col-span-2 space-y-1">
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Strategic Address (Location)</label>
+                <textarea required placeholder="Nanded Regional Coordinates..." class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none h-24 transition"></textarea>
+            </div>
+            <button type="button" onclick="window.location.href='index.html'" class="md:col-span-2 guardian-blue py-6 rounded-3xl font-bold text-lg shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition">
+                Authorize Profile
+            </button>
+        </form>
+        
+        <div class="text-center mt-8">
+            <button onclick="window.location.href='index.html'" class="text-[10px] text-slate-500 hover:text-blue-400 transition font-black uppercase tracking-widest">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Command Center
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function init() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            stars = Array.from({length: 150}, () => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height, z: Math.random() * canvas.width
+            }));
+        }
+        function draw() {
+            ctx.fillStyle = "#020617"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            stars.forEach(s => {
+                let x = (s.x - canvas.width / 2) * (canvas.width / s.z) + canvas.width / 2;
+                let y = (s.y - canvas.height / 2) * (canvas.width / s.z) + canvas.height / 2;
+                let size = (1 - s.z / canvas.width) * 2;
+                ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI * 2); ctx.fill();
+                s.z -= 1.5; if(s.z <= 0) s.z = canvas.width;
+            });
+            requestAnimationFrame(draw);
+        }
+        init(); draw();
+    </script>
+</body>
+</html>
+
