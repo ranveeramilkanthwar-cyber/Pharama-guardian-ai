@@ -3,173 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmaBee AI | Premium Health Intelligence</title>
+    <title>Pharma Guardian AI | Elite Health Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/11.0.8/framer-motion.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0f172a; color: white; overflow-x: hidden; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .bee-gradient { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
-        .hero-glow { position: absolute; top: -10%; left: 50%; transform: translateX(-50%); width: 800px; height: 600px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0) 70%); z-index: -1; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; overflow-x: hidden; }
+        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .guardian-gradient { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
+        .bee-gold { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); }
+        
+        /* High-End Animations */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
-    <div class="hero-glow"></div>
+<body class="min-h-screen">
 
-    <nav class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+    <div class="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] z-[-1]"></div>
+    <div class="fixed bottom-0 left-[-5%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] z-[-1]"></div>
+
+    <nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto sticky top-4 z-[100] glass-panel rounded-2xl mx-4 mb-10">
         <div class="flex items-center space-x-3">
-            <div class="bee-gradient p-2.5 rounded-xl shadow-lg shadow-yellow-500/20">
-                <i class="fas fa-bee text-slate-900 text-xl"></i>
+            <div class="guardian-gradient p-2 rounded-xl shadow-lg shadow-blue-500/30">
+                <i class="fas fa-shield-heart text-white text-lg"></i>
             </div>
-            <span class="text-2xl font-extrabold tracking-tight">Pharma<span class="text-yellow-400">Bee</span></span>
+            <span class="text-xl font-extrabold tracking-tighter">Pharma <span class="text-blue-400">Guardian AI</span></span>
         </div>
-        <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-400">
-            <a href="#" class="hover:text-white transition">Medicines</a>
-            <a href="#" class="hover:text-white transition">Disease Database</a>
-            <a href="#" class="hover:text-white transition">Agentic Safety</a>
+        
+        <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <a href="#" class="hover:text-blue-400 transition">Analytics</a>
+            <a href="#" class="hover:text-blue-400 transition">Protocols</a>
+            <a href="#" class="hover:text-blue-400 transition">Global DB</a>
         </div>
-        <button onclick="document.getElementById('vault').classList.toggle('hidden')" class="glass px-6 py-2.5 rounded-full text-sm font-bold hover:bg-white/10 transition">
-            Admin Vault
-        </button>
+
+        <div class="flex items-center space-x-4">
+            <button onclick="toggleModal('loginModal')" class="text-xs font-bold text-slate-400 hover:text-white transition">Login</button>
+            <button onclick="toggleModal('regModal')" class="guardian-gradient px-6 py-2.5 rounded-xl text-xs font-bold hover:scale-105 transition shadow-lg shadow-blue-600/20">Get Started</button>
+        </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 pt-20 pb-32 text-center">
-        <h1 class="text-6xl md:text-8xl font-extrabold mb-6 tracking-tighter">
-            Future of <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Pharmacy</span>.
+    <main class="max-w-7xl mx-auto px-6 text-center pt-10 pb-20 fade-in">
+        <h1 class="text-5xl md:text-8xl font-extrabold mb-8 tracking-tighter leading-[1.1]">
+            Elite Pharmacy <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Security & Analysis.</span>
         </h1>
-        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            World-class predictive AI for medicine analysis and disease diagnosis. Secured by Agentic intelligence.
+        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light">
+            Empowering healthcare with <b>Pharma Bee</b>—the agentic core of Pharma Guardian AI designed for high-fidelity symptom prediction.
         </p>
-        
-        <div class="flex flex-col md:flex-row justify-center gap-4 mb-20">
-            <button class="bee-gradient text-slate-900 px-10 py-4 rounded-2xl font-bold shadow-xl shadow-yellow-500/20 hover:scale-105 transition">Start Diagnosis</button>
-            <button class="glass px-10 py-4 rounded-2xl font-bold hover:bg-white/5 transition">Explore Drugs</button>
-        </div>
-
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div class="glass p-8 rounded-3xl group hover:border-yellow-500/50 transition">
-                <div class="w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-bolt text-yellow-500"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Instant Prediction</h3>
-                <p class="text-slate-400 text-sm">Uses Gemini 1.5 Flash to predict medicine side effects in < 1 second.</p>
-            </div>
-            <div class="glass p-8 rounded-3xl border-blue-500/30">
-                <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-shield-virus text-blue-500"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Safety Protocol</h3>
-                <p class="text-slate-400 text-sm">Automated cross-check for prescription requirements and allergy warnings.</p>
-            </div>
-            <div class="glass p-8 rounded-3xl">
-                <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-database text-emerald-500"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Global Database</h3>
-                <p class="text-slate-400 text-sm">Connected to real-world disease mapping and pharmaceutical trends.</p>
-            </div>
-        </div>
     </main>
 
-    <div id="vault" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[200] flex items-center justify-center p-6">
-        <div class="glass p-8 rounded-3xl w-full max-w-md border-yellow-500/30">
-            <h2 class="text-2xl font-bold mb-2">Secure API Vault</h2>
-            <p class="text-slate-400 text-sm mb-6">Enter your Gemini API key to activate PharmaBee.</p>
-            <input id="apiInput" type="password" placeholder="AIza..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white mb-4 outline-none focus:border-yellow-500">
-            <button onclick="saveKey()" class="w-full bee-gradient text-slate-900 font-bold py-4 rounded-xl transition">Activate System</button>
-            <p class="text-[10px] text-center mt-4 text-slate-500 uppercase tracking-widest font-bold">Encrypted & Local Only</p>
+    <div id="regModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[200] hidden items-center justify-center p-6 overflow-y-auto">
+        <div class="glass-panel w-full max-w-2xl p-8 md:p-12 rounded-[2.5rem] relative">
+            <button onclick="toggleModal('regModal')" class="absolute top-8 right-8 text-slate-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            <h2 class="text-3xl font-bold mb-2">Create Profile</h2>
+            <p class="text-slate-400 mb-8 text-sm">Join the global Pharma Guardian AI network.</p>
+            <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" placeholder="Full Name" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
+                <input type="email" placeholder="Email Address" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
+                <input type="tel" placeholder="Phone Number" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
+                <input type="date" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-slate-500 focus:border-blue-500 outline-none">
+                <textarea placeholder="Residential Address" class="md:col-span-2 bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none h-24"></textarea>
+                <button type="button" class="md:col-span-2 guardian-gradient py-5 rounded-2xl font-bold mt-2 shadow-xl shadow-blue-500/20">Register Identity</button>
+            </form>
         </div>
     </div>
 
-    <div class="fixed bottom-8 right-8 z-[150]">
-        <div id="chatUI" class="hidden glass w-[380px] h-[550px] rounded-[2rem] overflow-hidden flex flex-col shadow-2xl shadow-blue-500/10 border-white/10">
-            <div class="p-6 bg-white/5 border-b border-white/5 flex items-center justify-between">
+    <div id="loginModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[200] hidden items-center justify-center p-6">
+        <div class="glass-panel w-full max-w-md p-10 rounded-[2.5rem] relative">
+            <button onclick="toggleModal('loginModal')" class="absolute top-8 right-8 text-slate-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            <h2 class="text-3xl font-bold mb-8 text-center">Guardian Access</h2>
+            <div class="space-y-4">
+                <input type="text" placeholder="Email or Phone" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
+                <input type="password" placeholder="Password" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
+                <button type="button" class="w-full guardian-gradient py-4 rounded-xl font-bold">Login</button>
+                <div class="text-center text-[10px] text-slate-500 font-bold py-2 uppercase tracking-[0.3em]">OR</div>
+                <button type="button" class="w-full border border-white/10 hover:bg-white/5 py-4 rounded-xl font-bold transition text-sm">Login with OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 right-6 z-[150]">
+        <div id="beeChat" class="hidden glass-panel w-[350px] md:w-[400px] h-[550px] rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl border-blue-500/20 mb-4">
+            <div class="p-6 border-b border-white/5 flex items-center justify-between bg-blue-600/5">
                 <div class="flex items-center space-x-3">
-                    <div class="relative">
-                        <img src="https://cdn-icons-png.flaticon.com/512/826/826963.png" class="w-10 h-10">
-                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></div>
-                    </div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/826/826963.png" class="w-10 h-10 animate-float">
                     <div>
-                        <h4 class="font-bold text-sm">PharmaBee AI</h4>
-                        <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">Neural Link Active</p>
+                        <h4 class="font-bold text-sm">Pharma Bee Agent</h4>
+                        <p class="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Neural link encrypted</p>
                     </div>
                 </div>
-                <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+                <button onclick="toggleBee()"><i class="fas fa-chevron-down"></i></button>
             </div>
             
-            <div id="messages" class="flex-grow p-6 overflow-y-auto space-y-4">
-                <div class="glass p-4 rounded-2xl rounded-tl-none text-sm text-slate-200 border-yellow-500/20 bg-yellow-500/5">
-                    Welcome! I'm your Agentic Health assistant. Share a symptom or medicine name for deep analysis.
+            <div id="chatBox" class="flex-grow p-6 overflow-y-auto space-y-4 text-sm hide-scrollbar">
+                <div class="bg-blue-600/10 border border-blue-500/20 p-4 rounded-2xl rounded-tl-none text-slate-300">
+                    Bzzz! I am <b>Pharma Bee</b>. I am the intelligence core for <b>Pharma Guardian AI</b>. How can I help you analyze your symptoms today?
                 </div>
             </div>
 
             <div class="p-4 bg-white/5">
-                <div class="flex items-center glass rounded-2xl px-4 py-1 border-white/10">
-                    <input id="msgInput" type="text" placeholder="Analyze symptoms..." class="flex-grow bg-transparent py-3 text-sm outline-none">
-                    <button onclick="askBee()" class="text-yellow-400 p-2 hover:scale-110 transition"><i class="fas fa-paper-plane"></i></button>
+                <div class="flex items-center glass-panel rounded-2xl px-4 py-1 border-white/10">
+                    <input id="beeInput" type="text" placeholder="Ask Pharma Bee..." class="flex-grow bg-transparent py-4 text-sm outline-none">
+                    <button onclick="askBee()" class="text-blue-400 p-2 hover:scale-110 transition"><i class="fas fa-paper-plane text-xl"></i></button>
                 </div>
             </div>
         </div>
 
-        <button onclick="toggleChat()" class="bee-gradient w-16 h-16 rounded-full shadow-2xl shadow-yellow-500/40 flex items-center justify-center hover:scale-110 transition active:scale-95 border-4 border-slate-950">
-            <i class="fas fa-comment-dots text-slate-900 text-2xl"></i>
+        <button onclick="toggleBee()" class="bee-gold w-16 h-16 rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-slate-900 active:scale-95">
+            <img src="https://cdn-icons-png.flaticon.com/512/826/826963.png" class="w-10 h-10">
         </button>
     </div>
 
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        window.toggleChat = () => document.getElementById('chatUI').classList.toggle('hidden');
+        // AUTO-INJECTED API KEY FOR RELIABILITY
+        const API_KEY = "AIzaSyAh3_4OPrhb0QrkxLlKNE8bT7J0lmEaBX0";
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        // SECURITY: KEY IS NOT HARDCODED
-        let API_KEY = localStorage.getItem('pharma_key') || "";
+        window.toggleModal = (id) => {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+            el.classList.toggle('flex');
+        }
 
-        window.saveKey = () => {
-            const key = document.getElementById('apiInput').value;
-            if(key) {
-                localStorage.setItem('pharma_key', key);
-                API_KEY = key;
-                document.getElementById('vault').classList.add('hidden');
-                alert("Neural Link Established!");
-            }
-        };
+        window.toggleBee = () => document.getElementById('beeChat').classList.toggle('hidden');
 
         window.askBee = async () => {
-            if(!API_KEY) { 
-                document.getElementById('vault').classList.remove('hidden');
-                return;
-            }
-
-            const input = document.getElementById('msgInput');
-            const box = document.getElementById('messages');
-            const msg = input.value;
+            const input = document.getElementById('beeInput');
+            const box = document.getElementById('chatBox');
+            const msg = input.value.trim();
             if(!msg) return;
 
-            // User UI
-            box.innerHTML += `<div class="bg-blue-600/20 ml-12 p-4 rounded-2xl rounded-tr-none text-sm border border-blue-500/20">${msg}</div>`;
+            // Display User Bubble
+            box.innerHTML += `<div class="bg-white/5 ml-12 p-4 rounded-2xl rounded-tr-none text-right border border-white/10 text-slate-200">${msg}</div>`;
             input.value = "";
             box.scrollTop = box.scrollHeight;
 
-            // AI Processing
-            const genAI = new GoogleGenerativeAI(API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            
             try {
-                const prompt = `You are a world-class Pharma Agent. User says: ${msg}. Provide high-level medical analysis and prediction. Be concise, professional, and use bullet points for clarity. Add a disclaimer.`;
+                // System Instruction for Agentic Behavior
+                const prompt = `System: You are 'Pharma Bee', the official AI agent of 'Pharma Guardian AI'. 
+                Analyze this query: "${msg}". 
+                Respond with: 1. Predicted Health Condition 2. Relevant Medicines 3. Critical Safety Warning. 
+                Keep it professional and use bullet points. End with "Guardian ID: Active".`;
+                
                 const result = await model.generateContent(prompt);
                 const response = await result.response;
-                box.innerHTML += `<div class="glass p-4 rounded-2xl rounded-tl-none text-sm border-emerald-500/20 bg-emerald-500/5">🐝 <b>PharmaBee AI:</b><br>${response.text()}</div>`;
-            } catch (e) {
-                box.innerHTML += `<div class="text-red-400 text-[10px]">Neural link failed. Verify API Key in Vault.</div>`;
+                box.innerHTML += `<div class="bg-blue-600/5 p-4 rounded-2xl rounded-tl-none border-l-4 border-blue-500 text-slate-300">🐝 <b>Pharma Bee:</b><br><br>${response.text().replace(/\n/g, '<br>')}</div>`;
+            } catch (err) {
+                box.innerHTML += `<div class="text-red-400 text-xs italic">Neural connection lost. Please verify your data link.</div>`;
             }
             box.scrollTop = box.scrollHeight;
-        };
+        }
     </script>
 </body>
 </html>
