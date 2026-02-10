@@ -11,7 +11,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; overflow-x: hidden; margin: 0; }
         #space-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
         
-        /* Glassmorphism Master Style */
         .glass-vault { 
             background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(20px); 
@@ -19,103 +18,104 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Flashcard Roller Animation */
-        .roller-container {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 20px;
-            padding: 20px;
-            scrollbar-width: none;
-        }
+        /* Planetary Elements */
+        .planet { position: absolute; border-radius: 50%; filter: blur(2px); z-index: -1; opacity: 0.6; }
+        .planet-blue { width: 300px; height: 300px; background: radial-gradient(circle at 30% 30%, #3b82f6, #1e3a8a); top: 10%; left: -5%; }
+        .planet-red { width: 150px; height: 150px; background: radial-gradient(circle at 30% 30%, #ef4444, #7f1d1d); bottom: 10%; right: 5%; }
+
+        .roller-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 20px; scrollbar-width: none; }
         .roller-container::-webkit-scrollbar { display: none; }
         
-        .flash-card {
-            min-width: 280px;
-            scroll-snap-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-        }
+        .flash-card { min-width: 300px; scroll-snap-align: center; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .flash-card:hover { transform: scale(1.05) translateY(-10px); border-color: #3b82f6; }
 
+        .nav-menu { position: fixed; top: 20px; right: 20px; z-index: 100; }
+        .menu-content { display: none; position: absolute; top: 60px; right: 0; width: 220px; border-radius: 1.5rem; }
+        .menu-active .menu-content { display: block; animation: slideDown 0.3s ease-out; }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .guardian-gradient { background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%); }
-        .glow-text { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <canvas id="space-canvas"></canvas>
+    <div class="planet planet-blue"></div>
+    <div class="planet planet-red"></div>
 
     <nav class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto w-full z-50">
         <div class="flex items-center space-x-3">
-            <div class="guardian-gradient p-2 rounded-xl shadow-lg">
-                <i class="fas fa-id-badge text-white text-xl"></i>
-            </div>
-            <span class="text-2xl font-black tracking-tighter">Guardian <span class="text-blue-400">Vault</span></span>
+            <div class="guardian-gradient p-2 rounded-xl shadow-lg"><i class="fas fa-user-shield text-white text-xl"></i></div>
+            <span class="text-2xl font-black tracking-tighter">Guardian <span class="text-blue-500">Profile</span></span>
         </div>
-        <button onclick="window.location.href='index.html'" class="glass-vault px-6 py-2.5 rounded-full text-xs font-bold hover:bg-white/10 transition flex items-center">
-            <i class="fas fa-home mr-2"></i> Return to Command Center
-        </button>
+
+        <div class="nav-menu" id="menuWrapper">
+            <button onclick="toggleMenu()" class="glass-vault p-4 rounded-2xl hover:bg-white/10 transition">
+                <i class="fas fa-bars text-blue-400"></i>
+            </button>
+            <div class="menu-content glass-vault p-4">
+                <ul class="space-y-3 text-xs font-bold uppercase tracking-widest">
+                    <li><a href="index.html" class="flex items-center p-2 hover:text-blue-400"><i class="fas fa-home w-8"></i> Home</a></li>
+                    <li><a href="#" class="flex items-center p-2 text-blue-400"><i class="fas fa-user-circle w-8"></i> Profile</a></li>
+                    <li><a href="inventory.html" class="flex items-center p-2 hover:text-blue-400"><i class="fas fa-boxes w-8"></i> Inventory</a></li>
+                    <li><a href="orders.html" class="flex items-center p-2 hover:text-blue-400"><i class="fas fa-receipt w-8"></i> Orders</a></li>
+                    <li><hr class="border-white/10 my-2"></li>
+                    <li><button onclick="handleLogout()" class="flex items-center p-2 text-red-400 hover:text-red-500"><i class="fas fa-power-off w-8"></i> Logout</button></li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
     <main class="flex-grow flex flex-col items-center justify-center px-6 py-10">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold glow-text mb-4">Neural Profile Established</h1>
-            <p class="text-slate-400 uppercase tracking-[0.3em] text-[10px] font-bold">Authorized Personnel Data Access</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl mb-12">
+            <div class="glass-vault p-6 rounded-3xl text-center border-emerald-500/20">
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Total Orders</p>
+                <h2 class="text-3xl font-black text-emerald-400" id="stat-orders">128</h2>
+            </div>
+            <div class="glass-vault p-6 rounded-3xl text-center border-orange-500/20">
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Pending Refills</p>
+                <h2 class="text-3xl font-black text-orange-400" id="stat-refills">14</h2>
+            </div>
+            <div class="glass-vault p-6 rounded-3xl text-center border-red-500/20">
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Low Stock</p>
+                <h2 class="text-3xl font-black text-red-400">6</h2>
+            </div>
+            <div class="glass-vault p-6 rounded-3xl text-center border-purple-500/20">
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Rejected</p>
+                <h2 class="text-3xl font-black text-purple-400">9</h2>
+            </div>
         </div>
 
         <div class="w-full max-w-6xl relative">
             <div class="roller-container py-10">
-                
                 <div class="flash-card glass-vault p-8 rounded-[2.5rem] border-blue-500/20">
-                    <i class="fas fa-fingerprint text-3xl text-blue-500 mb-6"></i>
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Full Identity</h3>
+                    <i class="fas fa-id-card text-3xl text-blue-500 mb-6"></i>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Neural ID</h3>
                     <p class="text-xl font-bold mb-4" id="display-name">Loading Guardian...</p>
-                    <p class="text-[10px] text-blue-400 font-bold italic">Verification Status: Active</p>
+                    <button onclick="window.history.back()" class="text-[10px] text-blue-400 font-bold uppercase hover:underline"><i class="fas fa-arrow-left mr-2"></i>Back</button>
                 </div>
 
                 <div class="flash-card glass-vault p-8 rounded-[2.5rem]">
-                    <i class="fas fa-satellite-dish text-3xl text-purple-500 mb-6"></i>
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Communication Link</h3>
-                    <p class="text-xl font-bold mb-4" id="display-email">neural-link@active.ai</p>
-                    <p class="text-lg font-semibold text-slate-300" id="display-phone">+91 0000 0000</p>
+                    <i class="fas fa-broadcast-tower text-3xl text-purple-500 mb-6"></i>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Satellite Link</h3>
+                    <p class="text-sm font-bold text-slate-300" id="display-email">--</p>
+                    <p class="text-lg font-semibold text-blue-400" id="display-phone">--</p>
                 </div>
 
                 <div class="flash-card glass-vault p-8 rounded-[2.5rem]">
-                    <i class="fas fa-calendar-day text-3xl text-emerald-500 mb-6"></i>
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Birth Cycle (DOB)</h3>
-                    <p class="text-2xl font-bold mb-4" id="display-dob">-- / -- / ----</p>
-                    <p class="text-[10px] text-emerald-400 uppercase font-bold">Chronological Logged</p>
+                    <i class="fas fa-globe-asia text-3xl text-emerald-500 mb-6"></i>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Sector Location</h3>
+                    <p class="text-sm text-slate-300" id="display-address">Nanded Sector</p>
                 </div>
-
-                <div class="flash-card glass-vault p-8 rounded-[2.5rem] border-yellow-500/10">
-                    <i class="fas fa-map-location-dot text-3xl text-yellow-500 mb-6"></i>
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Strategic Address</h3>
-                    <p class="text-sm leading-relaxed text-slate-300" id="display-address">Nanded Regional Hub, Maharashtra, India</p>
-                </div>
-
-                <div class="flash-card glass-vault p-8 rounded-[2.5rem] border-rose-500/10">
-                    <i class="fas fa-notes-medical text-3xl text-rose-500 mb-6"></i>
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Neural History</h3>
-                    <p class="text-sm text-slate-400 italic">"No previous critical incidents logged in the Marathwada sector."</p>
-                </div>
-
-            </div>
-            
-            <div class="flex justify-center space-x-2 mt-4 text-slate-500 animate-pulse">
-                <i class="fas fa-chevron-left"></i>
-                <span class="text-[10px] uppercase font-bold tracking-widest">Swipe to Explore Neural Data</span>
-                <i class="fas fa-chevron-right"></i>
             </div>
         </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        // CONFIG - Using your established project credentials
         const firebaseConfig = {
             apiKey: "AIzaSyAK33HQYLg3BqW25Arp7ERjuVn637mSOOo",
             authDomain: "pharma-guardian-ai.firebaseapp.com",
@@ -129,26 +129,28 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Fetch User Data from Firestore
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-
+                const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    document.getElementById('display-name').innerText = data.name || "Unknown Guardian";
+                    document.getElementById('display-name').innerText = data.name || "Guardian";
                     document.getElementById('display-email').innerText = data.email;
                     document.getElementById('display-phone').innerText = data.phone || "No Link";
-                    document.getElementById('display-dob').innerText = data.dob || "--/--/--";
-                    document.getElementById('display-address').innerText = data.address || "Nanded Coordinates";
+                    document.getElementById('display-address').innerText = data.address || "Nanded";
+                    // Dynamic Stats from Firebase
+                    document.getElementById('stat-orders').innerText = data.totalOrders || "128";
+                    document.getElementById('stat-refills').innerText = data.pendingRefills || "14";
                 }
             } else {
-                window.location.href = 'registration.html';
+                window.location.href = 'login.html';
             }
         });
 
-        // Space Canvas Animation
+        window.toggleMenu = () => { document.getElementById('menuWrapper').classList.toggle('menu-active'); }
+        window.handleLogout = () => { signOut(auth).then(() => { window.location.href = 'login.html'; }); }
+
+        // Space Canvas
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
