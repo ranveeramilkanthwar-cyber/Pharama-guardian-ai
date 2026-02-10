@@ -3,163 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharma Guardian AI | Elite Health Intelligence</title>
+    <title>Pharma Guardian AI | Galactic Health Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; overflow-x: hidden; }
-        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .guardian-gradient { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
-        .bee-gold { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; overflow: hidden; margin: 0; }
         
-        /* High-End Animations */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* SPACE ANIMATION SYSTEM */
+        #space-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .guardian-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        .stat-card { transition: all 0.3s ease; border-left: 4px solid transparent; }
+        .stat-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
 
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        /* SCREENS */
+        .screen { position: absolute; width: 100%; height: 100vh; transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1); overflow-y: auto; }
+        .screen-hidden { transform: translateY(100%); }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <div class="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] z-[-1]"></div>
-    <div class="fixed bottom-0 left-[-5%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] z-[-1]"></div>
+    <canvas id="space-canvas"></canvas>
 
-    <nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto sticky top-4 z-[100] glass-panel rounded-2xl mx-4 mb-10">
-        <div class="flex items-center space-x-3">
-            <div class="guardian-gradient p-2 rounded-xl shadow-lg shadow-blue-500/30">
-                <i class="fas fa-shield-heart text-white text-lg"></i>
+    <div id="landingScreen" class="screen flex flex-col items-center justify-center px-6">
+        <div class="text-center mb-12 animate-pulse">
+            <div class="inline-block p-4 rounded-full bg-blue-500/20 mb-6 border border-blue-400/30">
+                <i class="fas fa-shield-heart text-5xl text-blue-400"></i>
             </div>
-            <span class="text-xl font-extrabold tracking-tighter">Pharma <span class="text-blue-400">Guardian AI</span></span>
-        </div>
-        
-        <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
-            <a href="#" class="hover:text-blue-400 transition">Analytics</a>
-            <a href="#" class="hover:text-blue-400 transition">Protocols</a>
-            <a href="#" class="hover:text-blue-400 transition">Global DB</a>
+            <h1 class="text-6xl font-black tracking-tighter mb-4">PHARMA <span class="text-blue-500">GUARDIAN</span></h1>
+            <p class="text-slate-400 tracking-[0.3em] uppercase text-xs font-bold">Safer Medicines, Smarter Lives</p>
         </div>
 
-        <div class="flex items-center space-x-4">
-            <button onclick="toggleModal('loginModal')" class="text-xs font-bold text-slate-400 hover:text-white transition">Login</button>
-            <button onclick="toggleModal('regModal')" class="guardian-gradient px-6 py-2.5 rounded-xl text-xs font-bold hover:scale-105 transition shadow-lg shadow-blue-600/20">Get Started</button>
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-6 text-center pt-10 pb-20 fade-in">
-        <h1 class="text-5xl md:text-8xl font-extrabold mb-8 tracking-tighter leading-[1.1]">
-            Elite Pharmacy <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Security & Analysis.</span>
-        </h1>
-        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light">
-            Empowering healthcare with <b>Pharma Bee</b>—the agentic core of Pharma Guardian AI designed for high-fidelity symptom prediction.
-        </p>
-    </main>
-
-    <div id="regModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[200] hidden items-center justify-center p-6 overflow-y-auto">
-        <div class="glass-panel w-full max-w-2xl p-8 md:p-12 rounded-[2.5rem] relative">
-            <button onclick="toggleModal('regModal')" class="absolute top-8 right-8 text-slate-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-            <h2 class="text-3xl font-bold mb-2">Create Profile</h2>
-            <p class="text-slate-400 mb-8 text-sm">Join the global Pharma Guardian AI network.</p>
-            <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Full Name" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
-                <input type="email" placeholder="Email Address" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
-                <input type="tel" placeholder="Phone Number" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
-                <input type="date" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-slate-500 focus:border-blue-500 outline-none">
-                <textarea placeholder="Residential Address" class="md:col-span-2 bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none h-24"></textarea>
-                <button type="button" class="md:col-span-2 guardian-gradient py-5 rounded-2xl font-bold mt-2 shadow-xl shadow-blue-500/20">Register Identity</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="loginModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[200] hidden items-center justify-center p-6">
-        <div class="glass-panel w-full max-w-md p-10 rounded-[2.5rem] relative">
-            <button onclick="toggleModal('loginModal')" class="absolute top-8 right-8 text-slate-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-            <h2 class="text-3xl font-bold mb-8 text-center">Guardian Access</h2>
-            <div class="space-y-4">
-                <input type="text" placeholder="Email or Phone" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
-                <input type="password" placeholder="Password" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:border-blue-500 outline-none">
-                <button type="button" class="w-full guardian-gradient py-4 rounded-xl font-bold">Login</button>
-                <div class="text-center text-[10px] text-slate-500 font-bold py-2 uppercase tracking-[0.3em]">OR</div>
-                <button type="button" class="w-full border border-white/10 hover:bg-white/5 py-4 rounded-xl font-bold transition text-sm">Login with OTP</button>
+        <div class="glass p-8 rounded-[2.5rem] w-full max-w-md shadow-2xl border-blue-500/20">
+            <div id="authContent">
+                <h2 class="text-2xl font-bold mb-6 text-center">Neural Link Access</h2>
+                <div class="space-y-4">
+                    <input type="text" placeholder="Full Name" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-blue-500">
+                    <input type="email" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-blue-500">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="tel" placeholder="Phone" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none">
+                        <input type="date" class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-slate-500 outline-none">
+                    </div>
+                    <button onclick="enterSystem()" class="w-full guardian-blue py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:scale-105 transition">Initialize Dashboard</button>
+                    <p class="text-[10px] text-center text-slate-500 uppercase font-bold mt-4 tracking-widest">Authorized Personnel Only</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="fixed bottom-6 right-6 z-[150]">
-        <div id="beeChat" class="hidden glass-panel w-[350px] md:w-[400px] h-[550px] rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl border-blue-500/20 mb-4">
-            <div class="p-6 border-b border-white/5 flex items-center justify-between bg-blue-600/5">
-                <div class="flex items-center space-x-3">
-                    <img src="https://cdn-icons-png.flaticon.com/512/826/826963.png" class="w-10 h-10 animate-float">
-                    <div>
-                        <h4 class="font-bold text-sm">Pharma Bee Agent</h4>
-                        <p class="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Neural link encrypted</p>
+    <div id="dashboardScreen" class="screen screen-hidden bg-[#f0f4f8] text-slate-800">
+        <nav class="bg-[#1a2b3c] text-white px-8 py-4 flex justify-between items-center sticky top-0 z-[50]">
+            <div class="flex items-center space-x-2">
+                <div class="bg-blue-500 p-1.5 rounded-lg"><i class="fas fa-shield-heart"></i></div>
+                <h1 class="font-bold text-lg">PharmaGuardian <span class="text-blue-400">AI</span></h1>
+            </div>
+            <div class="flex space-x-8 text-xs font-bold uppercase tracking-widest opacity-70">
+                <a href="#" class="text-blue-400 border-b-2 border-blue-400 pb-1">Dashboard</a>
+                <a href="#">Orders</a>
+                <a href="#">Inventory</a>
+                <a href="#">Patients</a>
+                <a href="#"><i class="fas fa-user-circle mr-1"></i> Admin</a>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-[#009688] text-white p-4 rounded-xl flex justify-between items-center shadow-md">
+                    <div><p class="text-[10px] opacity-80 font-bold uppercase">Total Orders</p><h2 class="text-3xl font-bold">128</h2></div>
+                    <i class="fas fa-pills text-3xl opacity-30"></i>
+                </div>
+                <div class="bg-[#ff9800] text-white p-4 rounded-xl flex justify-between items-center shadow-md">
+                    <div><p class="text-[10px] opacity-80 font-bold uppercase">Pending Refills</p><h2 class="text-3xl font-bold">14</h2></div>
+                    <i class="fas fa-phone text-3xl opacity-30"></i>
+                </div>
+                <div class="bg-[#f44336] text-white p-4 rounded-xl flex justify-between items-center shadow-md">
+                    <div><p class="text-[10px] opacity-80 font-bold uppercase">Low Stock Items</p><h2 class="text-3xl font-bold">6</h2></div>
+                    <i class="fas fa-box text-3xl opacity-30"></i>
+                </div>
+                <div class="bg-[#673ab7] text-white p-4 rounded-xl flex justify-between items-center shadow-md">
+                    <div><p class="text-[10px] opacity-80 font-bold uppercase">Rejected Orders</p><h2 class="text-3xl font-bold">9</h2></div>
+                    <i class="fas fa-user-slash text-3xl opacity-30"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Inventory Status</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center text-sm"><span class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Metformin</span><span class="text-slate-400">In Stock: <b>Plenty</b></span></div>
+                            <div class="flex justify-between items-center text-sm"><span class="flex items-center"><i class="fas fa-exclamation-circle text-red-500 mr-2"></i> Amlodipine</span><span class="text-red-500">Low Stock: <b>Very Low</b></span></div>
+                            <div class="flex justify-between items-center text-sm"><span class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Insulin Pen</span><span class="text-slate-400">In Stock: <b>Moderate</b></span></div>
+                            <div class="flex justify-between items-center text-sm"><span class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Paracetamol</span><span class="text-slate-400">In Stock: <b>Plenty</b></span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Recent Orders</h3>
+                        <table class="w-full text-xs">
+                            <thead class="text-slate-400 uppercase font-bold"><tr class="text-left"><th class="pb-3">Order ID</th><th>Patient</th><th>Medicine</th><th>Status</th></tr></thead>
+                            <tbody class="text-slate-600">
+                                <tr class="border-t border-slate-50"><td class="py-3">#4521</td><td>Sunita Rao</td><td>Amlodipine</td><td><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold">Completed</span></td></tr>
+                                <tr class="border-t border-slate-50"><td class="py-3">#4518</td><td>Rahul Mehta</td><td>Metformin</td><td><span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-[10px] font-bold">Pending</span></td></tr>
+                                <tr class="border-t border-slate-50"><td class="py-3">#4515</td><td>Neha Joshi</td><td>Paracetamol</td><td><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold">Rejected</span></td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <button onclick="toggleBee()"><i class="fas fa-chevron-down"></i></button>
-            </div>
-            
-            <div id="chatBox" class="flex-grow p-6 overflow-y-auto space-y-4 text-sm hide-scrollbar">
-                <div class="bg-blue-600/10 border border-blue-500/20 p-4 rounded-2xl rounded-tl-none text-slate-300">
-                    Bzzz! I am <b>Pharma Bee</b>. I am the intelligence core for <b>Pharma Guardian AI</b>. How can I help you analyze your symptoms today?
-                </div>
-            </div>
 
-            <div class="p-4 bg-white/5">
-                <div class="flex items-center glass-panel rounded-2xl px-4 py-1 border-white/10">
-                    <input id="beeInput" type="text" placeholder="Ask Pharma Bee..." class="flex-grow bg-transparent py-4 text-sm outline-none">
-                    <button onclick="askBee()" class="text-blue-400 p-2 hover:scale-110 transition"><i class="fas fa-paper-plane text-xl"></i></button>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Refill Alerts</h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex items-center p-2 bg-slate-50 rounded-lg border-l-4 border-orange-400">
+                                <span class="mr-3">🟠</span> <b>Ramesh Patil</b> - Metformin - <span class="text-slate-400 ml-1">Running out in 2 days</span>
+                            </div>
+                            <div class="flex items-center p-2 bg-slate-50 rounded-lg border-l-4 border-red-400">
+                                <span class="mr-3">🔴</span> <b>Sneha Shah</b> - Amlodipine - <span class="text-slate-400 ml-1">Needs refill soon</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Rejected Orders</h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between items-center"><span>#4515 - Neha Joshi - Paracetamol</span><span class="text-blue-600 font-bold uppercase text-[9px]">Prescription Required</span></div>
+                            <div class="flex justify-between items-center"><span>#4509 - Vijay Kumar - Tramadol</span><span class="text-red-600 font-bold uppercase text-[9px]">Dosage Limit Exceeded</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Refill Predictions</h3>
+                        <canvas id="predictionChart" class="w-full h-32"></canvas>
+                    </div>
                 </div>
             </div>
+            <p class="text-center text-slate-400 text-[10px] mt-10">Created by Abhijeet Kendre & Team</p>
         </div>
 
-        <button onclick="toggleBee()" class="bee-gold w-16 h-16 rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-slate-900 active:scale-95">
-            <img src="https://cdn-icons-png.flaticon.com/512/826/826963.png" class="w-10 h-10">
-        </button>
+        <div class="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+            <div id="beeChat" class="hidden glass w-[320px] h-[450px] rounded-3xl overflow-hidden flex flex-col mb-4 border-blue-500/20 text-white shadow-2xl">
+                <div class="bg-[#1a2b3c] p-4 text-xs font-bold flex items-center justify-between">
+                    <span>Pharma Bee AI Agent</span>
+                    <button onclick="toggleBee()"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="chatMessages" class="flex-grow p-4 overflow-y-auto text-xs space-y-3">
+                    <div class="bg-blue-600/20 p-3 rounded-2xl rounded-tl-none">Bzzz! I am Pharma Bee. I've successfully initialized your Guardian Dashboard. How can I assist with your inventory analysis?</div>
+                </div>
+                <div class="p-3 border-t border-white/10 flex bg-white/5">
+                    <input id="beeInput" type="text" placeholder="Ask Pharma Bee..." class="flex-grow text-xs bg-transparent p-2 outline-none">
+                    <button onclick="askBee()" class="text-blue-400 px-2"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            <button onclick="toggleBee()" class="bg-white p-1 rounded-full shadow-2xl border-2 border-blue-400 hover:scale-110 transition active:scale-95">
+                <img src="https://cdn-icons-png.flaticon.com/512/826/826963.png" class="w-14 h-14 rounded-full">
+            </button>
+        </div>
     </div>
 
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // AUTO-INJECTED API KEY FOR RELIABILITY
+        // CONFIG
         const API_KEY = "AIzaSyAh3_4OPrhb0QrkxLlKNE8bT7J0lmEaBX0";
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        window.toggleModal = (id) => {
-            const el = document.getElementById(id);
-            el.classList.toggle('hidden');
-            el.classList.toggle('flex');
+        // SPACE ENGINE
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function initSpace() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 0.5 + 0.1
+                });
+            }
         }
+
+        function animateSpace() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ffffff";
+            stars.forEach(s => {
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+                s.y += s.speed;
+                if(s.y > canvas.height) s.y = 0;
+            });
+            requestAnimationFrame(animateSpace);
+        }
+
+        window.enterSystem = () => {
+            document.getElementById('landingScreen').style.transform = "translateY(-100%)";
+            document.getElementById('dashboardScreen').classList.remove('screen-hidden');
+            document.body.style.overflow = "auto";
+            initChart();
+        };
 
         window.toggleBee = () => document.getElementById('beeChat').classList.toggle('hidden');
 
         window.askBee = async () => {
             const input = document.getElementById('beeInput');
-            const box = document.getElementById('chatBox');
+            const box = document.getElementById('chatMessages');
             const msg = input.value.trim();
             if(!msg) return;
 
-            // Display User Bubble
-            box.innerHTML += `<div class="bg-white/5 ml-12 p-4 rounded-2xl rounded-tr-none text-right border border-white/10 text-slate-200">${msg}</div>`;
+            box.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl rounded-tr-none text-right ml-8">${msg}</div>`;
             input.value = "";
             box.scrollTop = box.scrollHeight;
 
             try {
-                // System Instruction for Agentic Behavior
-                const prompt = `System: You are 'Pharma Bee', the official AI agent of 'Pharma Guardian AI'. 
-                Analyze this query: "${msg}". 
-                Respond with: 1. Predicted Health Condition 2. Relevant Medicines 3. Critical Safety Warning. 
-                Keep it professional and use bullet points. End with "Guardian ID: Active".`;
-                
+                const prompt = `You are 'Pharma Bee', AI Agent for 'Pharma Guardian AI'. User says: ${msg}. Provide a quick analysis of inventory or health safety based on the Pharma Guardian theme. Be concise.`;
                 const result = await model.generateContent(prompt);
-                const response = await result.response;
-                box.innerHTML += `<div class="bg-blue-600/5 p-4 rounded-2xl rounded-tl-none border-l-4 border-blue-500 text-slate-300">🐝 <b>Pharma Bee:</b><br><br>${response.text().replace(/\n/g, '<br>')}</div>`;
-            } catch (err) {
-                box.innerHTML += `<div class="text-red-400 text-xs italic">Neural connection lost. Please verify your data link.</div>`;
+                box.innerHTML += `<div class="bg-blue-600/20 p-3 rounded-2xl rounded-tl-none mr-8">🐝 <b>Bee:</b> ${result.response.text()}</div>`;
+            } catch (e) {
+                box.innerHTML += `<div class="text-red-400 text-[10px]">Bzzz... Neural Link error.</div>`;
             }
             box.scrollTop = box.scrollHeight;
+        };
+
+        function initChart() {
+            const c = document.getElementById('predictionChart').getContext('2d');
+            new Chart(c, {
+                type: 'line',
+                data: {
+                    labels: ['Dec 5', 'Apr 1', 'Apr 19', 'Apr 9', 'Apr 14', 'Apr 16', 'Apr 20'],
+                    datasets: [{
+                        label: 'Demand',
+                        data: [1, 4, 2, 8, 2, 5, 1],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#3b82f6'
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { size: 8 } } } } }
+            });
         }
+
+        initSpace();
+        animateSpace();
+        window.onresize = initSpace;
     </script>
 </body>
 </html>
