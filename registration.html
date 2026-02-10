@@ -3,72 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neural Vault | Pharma Guardian AI</title>
+    <title>Neural Data Entry | Pharma Guardian AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
         #space-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .guardian-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-vault { animation: slideIn 0.6s ease-out forwards; }
+        .glass-vault { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .guardian-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
     </style>
 </head>
 <body>
     <canvas id="space-canvas"></canvas>
 
-    <div class="glass w-full max-w-2xl p-10 rounded-[3.5rem] shadow-2xl m-4 relative animate-vault border-blue-500/20">
-        <div class="text-center mb-8">
-            <div class="guardian-blue w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <i class="fas fa-user-astronaut text-2xl text-white"></i>
-            </div>
-            <h2 class="text-3xl font-black tracking-tighter">PHARMA <span class="text-blue-500">VAULT</span></h2>
-            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mt-2">Neural Identity Establishment</p>
+    <div class="glass-vault w-full max-w-4xl p-10 rounded-[3.5rem] shadow-2xl m-4 relative border-blue-500/20">
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-black tracking-tighter uppercase">Initialize <span class="text-blue-500">Dashboard Data</span></h2>
+            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mt-2 italic">Syncing Nanded Sector Statistics</p>
         </div>
-        
-        <form id="regForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Full Name</label>
-                <input type="text" id="fullName" required placeholder="Enter Name" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+
+        <form id="userDataForm" class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+            
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest border-b border-blue-500/20 pb-2">Operational Stats</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20">
+                        <label class="text-[9px] font-bold text-emerald-400 uppercase">Total Orders</label>
+                        <input type="number" id="totalOrders" placeholder="128" required class="w-full bg-transparent text-xl font-black outline-none">
+                    </div>
+                    <div class="bg-orange-500/10 p-4 rounded-2xl border border-orange-500/20">
+                        <label class="text-[9px] font-bold text-orange-400 uppercase">Pending Refills</label>
+                        <input type="number" id="pendingRefills" placeholder="14" required class="w-full bg-transparent text-xl font-black outline-none">
+                    </div>
+                </div>
             </div>
-            <div class="space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Email Address</label>
-                <input type="email" id="email" required placeholder="id@pharmaguardian.ai" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest border-b border-blue-500/20 pb-2">Inventory Status</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center glass-vault p-3 rounded-xl">
+                        <span class="text-xs font-bold">Metformin</span>
+                        <select id="invMetformin" class="bg-transparent text-xs font-bold text-blue-400 outline-none">
+                            <option value="In Stock: Plenty">In Stock: Plenty</option>
+                            <option value="Low Stock">Low Stock</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between items-center glass-vault p-3 rounded-xl">
+                        <span class="text-xs font-bold">Amlodipine</span>
+                        <select id="invAmlodipine" class="bg-transparent text-xs font-bold text-red-400 outline-none">
+                            <option value="Low Stock: Very Low">Low Stock: Very Low</option>
+                            <option value="In Stock: Plenty">In Stock: Plenty</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Phone Network</label>
-                <input type="tel" id="phone" required placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
+
+            <div class="md:col-span-2">
+                <button type="submit" class="w-full guardian-gradient py-6 rounded-3xl font-black text-lg shadow-2xl shadow-blue-600/30 hover:scale-[1.01] transition uppercase tracking-widest">
+                    Synchronize Neural Data
+                </button>
             </div>
-            <div class="space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Birth Cycle (DOB)</label>
-                <input type="date" id="dob" required class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-slate-400 focus:border-blue-500 outline-none transition">
-            </div>
-            <div class="md:col-span-2 space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Password (Required for Auth)</label>
-                <input type="password" id="password" required placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition">
-            </div>
-            <div class="md:col-span-2 space-y-1">
-                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2 italic">Strategic Address (Location)</label>
-                <textarea id="address" required placeholder="Nanded Regional Coordinates..." class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none h-24 transition"></textarea>
-            </div>
-            <button type="submit" class="md:col-span-2 guardian-blue py-6 rounded-3xl font-bold text-lg shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition">
-                Authorize Profile
-            </button>
         </form>
-        
-        <div class="text-center mt-8">
-            <button onclick="window.location.href='index.html'" class="text-[10px] text-slate-500 hover:text-blue-400 transition font-black uppercase tracking-widest">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Command Center
-            </button>
-        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAK33HQYLg3BqW25Arp7ERjuVn637mSOOo",
@@ -76,69 +78,60 @@
             projectId: "pharma-guardian-ai",
             storageBucket: "pharma-guardian-ai.firebasestorage.app",
             messagingSenderId: "569057807951",
-            appId: "1:569057807951:web:2d0372e0f022f3428d643a",
-            measurementId: "G-KJBCZRLPKJ"
+            appId: "1:569057807951:web:2d0372e0f022f3428d643a"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const regForm = document.getElementById('regForm');
-        regForm.addEventListener('submit', async (e) => {
+        document.getElementById('userDataForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const dob = document.getElementById('dob').value;
-            const address = document.getElementById('address').value;
+            const user = auth.currentUser;
 
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                await setDoc(doc(db, "users", user.uid), {
-                    name: fullName,
-                    email: email,
-                    phone: phone,
-                    dob: dob,
-                    address: address, 
-                    created_at: new Date()
-                });
-
-                alert("Neural Identity Established! Welcome, Guardian.");
-                
-                // --- CONNECTION MODIFICATION ---
-                // This now sends the user directly to the profile cards roller
-                window.location.href = 'profile.html'; 
-                
-            } catch (error) {
-                alert("Auth Error: " + error.message);
+            if (user) {
+                try {
+                    // Update user metrics in Firestore
+                    await updateDoc(doc(db, "users", user.uid), {
+                        totalOrders: document.getElementById('totalOrders').value,
+                        pendingRefills: document.getElementById('pendingRefills').value,
+                        inventory: {
+                            metformin: document.getElementById('invMetformin').value,
+                            amlodipine: document.getElementById('invAmlodipine').value
+                        },
+                        onboardingComplete: true
+                    });
+                    
+                    // Proceed to Profile Dashboard
+                    window.location.href = 'profile.html'; 
+                } catch (err) {
+                    alert("System Sync Error: " + err.message);
+                }
+            } else {
+                alert("Authorization Required. Redirecting to Login.");
+                window.location.href = 'login.html';
             }
         });
     </script>
 
     <script>
+        // Star Field Engine
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            stars = Array.from({length: 150}, () => ({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height, z: Math.random() * canvas.width
-            }));
+            stars = Array.from({length: 150}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width }));
         }
         function draw() {
             ctx.fillStyle = "#020617"; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "white";
             stars.forEach(s => {
-                let x = (s.x - canvas.width / 2) * (canvas.width / s.z) + canvas.width / 2;
-                let y = (s.y - canvas.height / 2) * (canvas.width / s.z) + canvas.height / 2;
-                let size = (1 - s.z / canvas.width) * 2;
-                ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI * 2); ctx.fill();
-                s.z -= 1.5; if(s.z <= 0) s.z = canvas.width;
+                let x = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+                let y = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+                let size = (1 - s.z/canvas.width) * 2;
+                ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI*2); ctx.fill();
+                s.z -= 1.2; if(s.z <= 0) s.z = canvas.width;
             });
             requestAnimationFrame(draw);
         }
